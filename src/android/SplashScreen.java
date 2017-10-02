@@ -325,6 +325,10 @@ public class SplashScreen extends CordovaPlugin {
                     spinnerStart();
                 }
 
+                if (preferences.getBoolean("ShowSplashScreenAppVersion", true)) {
+                    showAppVersion();
+                }
+
                 // Set Runnable to remove splash screen just in case
                 if (hideAfterDelay) {
                     final Handler handler = new Handler();
@@ -386,4 +390,35 @@ public class SplashScreen extends CordovaPlugin {
             }
         });
     }
+
+
+
+    private void showAppVersion() {
+
+      cordova.getActivity().runOnUiThread(new Runnable() {
+          public void run() {
+
+              //LinearLayout linearLayout =  new LinearLayout(cordova.getActivity());
+              //linearLayout.setOrientation(LinearLayout.vertical);
+
+              TextView tv = new TextView(this);
+              tv.setText("vX.X");
+              tv.setTextSize(20);
+              tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+
+              //linearLayout.addView(tv);
+
+
+              RelativeLayout bottomLayout = new RelativeLayout(cordova.getActivity());
+              bottomLayout.setGravity(Gravity.BOTTOM);
+              bottomLayout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+              RelativeLayout.addView(tv);
+
+
+          }
+      });
+    }
+
+
 }

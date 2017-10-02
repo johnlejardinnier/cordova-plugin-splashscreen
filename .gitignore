@@ -26,3 +26,4 @@ node_modules
 /tests/ios/CDVSplashScreenTest/CDVSplashScreenTest.xcodeproj/xcuserdata/
 
 /tests/ios/CDVSplashScreenTest.xcworkspace/xcuserdata/
+/.gtm/
