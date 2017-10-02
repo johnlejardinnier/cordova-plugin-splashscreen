@@ -402,7 +402,7 @@ public class SplashScreen extends CordovaPlugin {
               //LinearLayout linearLayout =  new LinearLayout(cordova.getActivity());
               //linearLayout.setOrientation(LinearLayout.vertical);
 
-              TextView tv = new TextView(this);
+              TextView tv = new TextView(webView.getContext());
               tv.setText("vX.X");
               tv.setTextSize(20);
               tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
@@ -414,7 +414,7 @@ public class SplashScreen extends CordovaPlugin {
               bottomLayout.setGravity(Gravity.BOTTOM);
               bottomLayout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
-              RelativeLayout.addView(tv);
+              bottomLayout.addView(tv);
 
 
           }
