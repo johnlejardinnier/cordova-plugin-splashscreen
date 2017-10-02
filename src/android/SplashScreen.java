@@ -40,12 +40,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageInfo;
 
 public class SplashScreen extends CordovaPlugin {
     private static final String LOG_TAG = "SplashScreen";
@@ -63,6 +70,12 @@ public class SplashScreen extends CordovaPlugin {
      * Displays the splash drawable.
      */
     private ImageView splashImageView;
+
+
+    /**
+    * Display custom text on SplashScreen
+    **/
+    private TextView splashTextView;
 
     /**
      * Remember last device orientation to detect orientation changes.
@@ -227,6 +240,7 @@ public class SplashScreen extends CordovaPlugin {
 
                         splashImageView.setAnimation(fadeOut);
                         splashImageView.startAnimation(fadeOut);
+                        splashTextView.startAnimation(fadeOut);
 
                         fadeOut.setAnimationListener(new Animation.AnimationListener() {
                             @Override
@@ -240,6 +254,7 @@ public class SplashScreen extends CordovaPlugin {
                                     splashDialog.dismiss();
                                     splashDialog = null;
                                     splashImageView = null;
+                                    splashTextView = null;
                                 }
                             }
 
@@ -372,11 +387,13 @@ public class SplashScreen extends CordovaPlugin {
 
                 centeredLayout.addView(progressBar);
 
+
                 spinnerDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 spinnerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 spinnerDialog.show();
                 spinnerDialog.setContentView(centeredLayout);
+
             }
         });
     }
@@ -394,29 +411,62 @@ public class SplashScreen extends CordovaPlugin {
 
 
 
+    private String getAppVersion() {
+
+      String appVersion = null;
+
+      try {
+
+        String packageName = cordova.getActivity().getPackageName();
+        PackageManager packageManager = cordova.getActivity().getApplicationContext().getPackageManager();
+        PackageInfo pi = packageManager.getPackageInfo(packageName, 0);
+
+        appVersion = "v" + pi.versionName;
+
+      } catch(Exception e) {
+        e.printStackTrace();
+      }
+
+
+      return appVersion;
+    }
+
+
+
+
+    private int getGravity(String position) {
+
+      if(position.equals("left")) {
+        return Gravity.LEFT;
+      } else if(position.equals("center")) {
+        return Gravity.CENTER;
+      }
+
+      return Gravity.RIGHT;
+    }
+
+
     private void showAppVersion() {
 
       cordova.getActivity().runOnUiThread(new Runnable() {
           public void run() {
 
-              //LinearLayout linearLayout =  new LinearLayout(cordova.getActivity());
-              //linearLayout.setOrientation(LinearLayout.vertical);
 
-              TextView tv = new TextView(webView.getContext());
-              tv.setText("vX.X");
-              tv.setTextSize(20);
-              tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+               String position = preferences.getString("SplashScreenAppVersionGravity", "RIGHT");
 
-              //linearLayout.addView(tv);
+               int gravity = getGravity(position);
+
+               RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+               lp.setMargins(50,50,50,50);
 
 
-              RelativeLayout bottomLayout = new RelativeLayout(cordova.getActivity());
-              bottomLayout.setGravity(Gravity.BOTTOM);
-              bottomLayout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+               splashTextView = new TextView(webView.getContext());
+               splashTextView.setText(getAppVersion());
+               splashTextView.setTextSize(preferences.getInteger("SplashScreenAppVersionSize", 20));
+               splashTextView.setTextColor(Color.parseColor(preferences.getString("SplashScreenAppVersionColor", "#FFFFFF")));
+               splashTextView.setGravity(gravity | Gravity.BOTTOM);
 
-              bottomLayout.addView(tv);
-
-
+               splashDialog.addContentView(splashTextView, lp);
           }
       });
     }
