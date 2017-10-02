@@ -21,7 +21,7 @@
 # Release Notes
 
 
-### 4.1.0 (Oct 02, 2017)
+### 4.0.4 (Oct 02, 2017)
 * Display app version on splashscreen
 
 ### 4.0.3 (Apr 27, 2017)
