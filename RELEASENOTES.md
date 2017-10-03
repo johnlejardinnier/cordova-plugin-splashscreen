@@ -22,7 +22,7 @@
 
 
 ### 4.0.4 (Oct 02, 2017)
-* Display app version on splashscreen
+* Display app version on splashscreen (Android, iOS)
 
 ### 4.0.3 (Apr 27, 2017)
 * [CB-12622](https://issues.apache.org/jira/browse/CB-12622) Added **Android 6.0** build badge to `README`

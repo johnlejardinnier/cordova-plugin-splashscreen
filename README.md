@@ -386,7 +386,7 @@ To disable the splashscreen add the following preference to `config.xml`:
 ```
 
 
-#### Display app version (Android)
+#### Display app version (Android, iOS)
 
 To display your app version on splashscreen add the following preference to `config.xml`:
 ```xml
